@@ -1,0 +1,179 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+		<title>e-barber</title>
+
+		<!-- Bootstrap core CSS & JQuery-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<!-- Custom styles for this template -->
+		<link rel="stylesheet" type="text/css" href="{% static 'css/results.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/av_rating.css' %}">
+		<script src="https://kit.fontawesome.com/3781654338.js" crossorigin="anonymous"></script>
+	</head>
+	<style>
+		body {
+			background-image: url("{% static 'img/barberBG1.jpg' %}");
+			background-size: cover;
+		}
+	</style>
+	<body>
+			{% if request.session.name %}
+					<!-- Customer Navbar -->
+					<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+						<a class="navbar-brand" style="color:white;"><em>e-barber</em></a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#cnavbar">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="cnavbar">
+							<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+								<li class="nav-item" href="{% url 'ebarber:index' %}">
+									<a class="nav-link" style="color:#6B8E23" href="">
+										Search
+									</a>
+								</li>
+								<li class="nav-item" href="#">
+									<a class="nav-link" style="color:#6B8E23" href="#">
+										My reviews
+									</a>
+								</li>
+								<li class="nav-item" href="#">
+									<a class="nav-link" style="color:#6B8E23" href="#">
+										My appointments
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!-- Account Option on Navbar + Avatars -->
+						<div id=AccountsBnC>
+							<form class="form-inline my-2 my-lg-0">
+								<div class="nav-item dropdown">
+									<div class="border" style="border-radius:0px;">
+										<a class="nav-link dropdown-toggle text-white bg-dark" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											Account
+										</a>
+										<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+											<a class="dropdown-item" href="{% url 'ebarber:logout' %}">
+												<span class="border-0">
+													<img src="{% static 'img/logoutAv.jpg' %}" alt="" class="avatar rounded-circle" style="width:25px; height:25px; border-radius:25px;"> Log out
+
+												</span>
+											</a>
+											<a class="dropdown-item" href="">
+												<span class="border-0">
+													<img src="{% static 'img/changepas.png' %}" alt="" class="avatar rounded-circle" style="width:25px; height:25px; border-radius:25px;"> Change Password
+												</span>
+											</a>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<span class="border-0">
+							<img src="{% static 'img/customerAv.png' %}" alt="Avatar" class="avatar rounded-circle" style="width:50px; height:50px; border-radius:50px;" data-toggle="tooltip" title="Signed in as {{ request.session.username }}">
+						</span>
+					</nav>
+					<!-- End of navbar -->
+					<br>
+
+					<ul class="container responsive">
+						<div class="jumbotron">
+							<h1>Available barbershops: <span class="text-info"> {{ num }}</span> / {{ aname }}</h1>
+						</div>
+					{% for barber in availables %}
+							<li class="flex-item">
+								<ul class="barber-container responsive">
+									<li class="bflex-item" style="flex-grow:3;">
+										<dl>
+											<dt><h1>{{ barber.username }}</h1></dt>
+											<dd>{{ barber.address }}</dd>
+											<dd>{{ barber.phone }}</dd>
+										</dl>
+									</li>
+									<li class="bflex-item" style="flex-grow:1;">
+										<ul class="combine-cont">
+											<li class="comb-item">
+												<img src="{% static 'img/barbr.jpg' %}" alt="barbershop" class="img-fluid" width="220px"  style="border:3px grey; border-radius:50px; height:160px;">
+											</li>
+											<li class="comb-item">
+												<ul class="barber-btn-container">
+													<li $activetabbook class="btn-item">
+														<a class="btn btn-success" type="submit" style="color:white;" href="{% url 'ebarber:index' %}">Make reservation</a>
+														</li>
+													<li $activetabinfo class="btn-item">
+														<a class="btn btn-info" type="submit" style="color:white;" href="{% url 'ebarber:index' %}">More information</a>
+													</li>
+													<li $activetabreview class="btn-item">
+														<a class="btn btn-warning" type="submit" style="color:white;" href="{% url 'ebarber:index' %}">Review the barber</a>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+
+								</ul>
+							</li>
+					{% endfor %}
+					</ul>
+					<!-- /container -->
+			{% else %}}
+				<!-- Available Barbershops for guests -->
+				<ul class="container responsive">
+					<div class="jumbotron">
+						<h1>Available barbershops: <span class="text-info"> {{ num }}</span> / {{ aname }}</h1>
+					</div>
+					<a type="button" class="btn btn-light btn-block" style="background-color:#8B0000; color:white;" href="{% url 'ebarber:index' %}">Back to menu</a>
+				{% for barber in availables %}
+						<li class="flex-item">
+							<ul class="barber-container responsive">
+								<li class="bflex-item" style="flex-grow:3;">
+									<dl>
+										<dt><h1>{{ barber.username }}</h1></dt>
+										<dd>{{ barber.address }}</dd>
+										<dd>{{ barber.phone }}</dd>
+									</dl>
+								</li>
+								<li class="bflex-item" style="flex-grow:1;">
+									<ul class="combine-cont">
+										<li class="comb-item">
+											<img src="{% static 'img/barbr.jpg' %}" alt="barbershop" class="img-fluid" width="220px"  style="border:3px grey; border-radius:50px; height:160px;">
+										</li>
+										<li class="comb-item">
+											<ul class="barber-btn-container">
+												<li $activetabbook class="btn-item">
+													<a class="btn btn-success" type="submit" style="color:white;" href="{% url 'ebarber:index' %}">Make reservation</a>
+													</li>
+												<li $activetabinfo class="btn-item">
+													<a class="btn btn-info" type="submit" style="color:white;" href="{% url 'ebarber:index' %}">More information</a>
+												</li>
+												<li $activetabreview class="btn-item">
+													<a class="btn btn-warning" type="submit" style="color:white;" href="{% url 'ebarber:index' %}">Review the barber</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+
+							</ul>
+						</li>
+				{% endfor %}
+				</ul>
+			<!-- End of container -->
+		{% endif %}
+
+
+		<!-- =================== Place all javascript at the end of the document so the pages load faster =================== -->
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<!-- Bootstrap core JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
+	</body>
+</head>

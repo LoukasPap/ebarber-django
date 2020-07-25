@@ -1,0 +1,198 @@
+<!-- <%
+	if(session.getAttribute("user") == null) {
+		request.setAttribute("messages", "To access this page you must first register");
+%>
+	<jsp:forward page="index.jsp" />
+<%  } %> -->
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+		<title>e-barber</title>
+
+		<!-- Bootstrap core CSS & JQuery-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<!-- Custom styles for this template -->
+		<link rel="stylesheet" type="text/css" href="{% static 'css/BarbershopPage.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/rating.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/booking.css' %}">
+		<script src="https://kit.fontawesome.com/3781654338.js" crossorigin="anonymous"></script>
+	</head>
+	<style>
+		body {
+			background-image: url("{% static 'img/barberBG1.jpg' %}");
+			background-size: cover;
+		}
+	</style>
+	<body>
+	<!-- BARBERSHOP SIDE -->
+	<!-- Barbershop Navbar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" style="color:white;"><em>e-barber</em></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bnavbar">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="bnavbar">
+			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+				<li class="nav-item" href="#">
+					<a class="nav-link" style="color:#6B8E23" href="#">
+						My Barbershop
+					</a>
+				</li>
+				<li class="nav-item" href="#">
+					<a class="nav-link" style="color:#6B8E23" href="#">
+						Bookings
+					</a>
+				</li>
+				<li class="nav-item" href="#">
+					<a class="nav-link" style="color:#6B8E23" href="#">
+						Contact with us
+					</a>
+				</li>
+				{% if message %}
+					<li class="nav-item">
+						<div class="alert alert-warning alert-dismissible" style="position:absolute;">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
+							{{ message }}
+						</div>
+					</li>
+			{% endif %}
+			{%	if success %}
+					<li class="nav-item">
+						<div class="alert alert-success alert-dismissible" style="position:absolute;">
+							<button type="button" class="close" data-dismiss="alert">&times;</button>
+							{{ success }}
+						</div>
+					</li>
+			{% endif %}
+			</ul>
+		</div>
+		<!-- Account Option on Navbar + Avatars -->
+		<div id=AccountsBnC>
+			<form class="form-inline my-2 my-lg-0">
+				<div class="nav-item dropdown">
+					<div class="border" style="border-radius:0px;">
+						<a class="nav-link dropdown-toggle text-white bg-dark" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						  Account
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="{% url 'ebarber:logout' %}">
+								<span class="border-0">
+									<img src="{% static 'img/logoutAv.jpg' %}" alt="Logout img" class="avatar rounded-circle" style="width:25px; height:25px; border-radius:25px;"> Log out
+								</span>
+							</a>
+							<a class="dropdown-item" href="#">
+								<span class="border-0">
+									<img src="{% static 'img/changepas.png' %}" alt="Change img" class="avatar rounded-circle" style="width:25px; height:25px; border-radius:25px;"> Change your Password
+								</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<span class="border-0">
+			<img src="{% static 'img/bpoleAv.jpg' %}" alt="Avatar" class="avatar rounded-circle" style="width:50px; height:50px; border-radius:50px;" data-toggle="tooltip" title="Signed in as {{ request.session.username}}">
+		</span>
+	</nav>
+	<br>
+
+		<ul class="nav nav-pills nav-justified mb-3" id="myTab" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Information</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a>
+			</li>
+		</ul>
+
+		<div class="tab-content" id="myTabContent">
+			<!-- Info -->
+			<div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+				<div class="flex-container">
+					<!-- info_container -->
+					<div class="info_container theme-showcase" role="main">
+						<h1 class="display-3" style="text-align:center;"><code style="color:#6B8E23;">{{ request.session.username }}</code></h1>
+						<!--Price-->
+						<h4 style="text-align:center;">Prices</h4>
+						<table class="table table-hover table-bordered table-responsive-sm">
+							<thead class="thead-dark">
+								<tr>
+									<th style="width:50%">Services</th>
+									<th>Under 18</th>
+									<th>Man</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Haircut</td>
+									<td>7 €</td>
+									<td>10 €</td>
+								</tr>
+								<tr>
+									<td>Shaving</td>
+									<td>5 €</td>
+									<td>7 €</td>
+								</tr>
+								<tr>
+									<td>Trimming</td>
+									<td>3 €</td>
+									<td>5 €</td>
+								</tr>
+								<tr>
+									<td>Haircut + Shaving<span class="badge badge-success" style="background-color:#6B8E23;">Best deal</span></td>
+									<td>10 €</td>
+									<td>14 €</td>
+								</tr>
+								<tr>
+									<td>Haircut + Trimming</td>
+									<td>8 €</td>
+									<td>12 €</td>
+								</tr>
+							</tbody>
+						</table><br>
+						<!--Contact info-->
+						<h4 style="text-align:center;">Contact info</h4>
+						<table class="table table-hover table-bordered">
+							<thead class="thead-dark">
+								<tr>
+									<th>Phone</th>
+									<th>Business email</th>
+									<th>Address</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{ request.session.phone }}</td>
+									<td>{{ request.session.email }}</td>
+									<td>{{ request.session.address }}</td>
+								</tr>
+							</tbody>
+						</table><br>
+						<h4 style="text-align:center;">Photos</h4>
+						<img src="{% static 'img/barberProf.jpg' %}" alt="barber" style="width:200px;">
+					</div>
+					<!-- end of info container -->
+				</div>
+			</div>
+			<!-- Reviews -->
+			<div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+					<h2 class="text-center" style="color:white; margin-top:5%;"><em class="display-4 font-weight-bolder">No <text style="color:#8B0000;">reviews</text> yet.</h2>
+			</div>
+	</div>
+
+		<!-- =================== Place all javascript at the end of the document so the pages load faster =================== -->
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<!-- Bootstrap core JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
+	</body>
+</html>

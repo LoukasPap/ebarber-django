@@ -1,0 +1,91 @@
+/* t8170101 ,t8170192 (κατανόηση όλων) */
+
+#AccountsBnC{
+	margin-right:5%;
+	color:black;
+}
+
+.fa-star{
+	color:#FFD700;
+}
+
+.info_container {
+  border-radius: 15px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.book_container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.flex-container {
+	display: flex;
+	flex-direction:row;
+	justify-content:space-evenly;
+	flex-wrap: wrap;
+	
+}
+
+.wrap {
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
+}
+
+.re-container{
+	background-color:#d7ffb3;
+	border-radius: 5px;
+	padding: 10px;
+	display:flex;
+	flex-wrap: wrap;
+	flex-basis: 18%;
+    align-items: first baseline;
+	margin:0.5%;
+}
+
+.re-container img {
+	border-radius: 50%;
+	width:80px;
+}
+
+@media (max-width: 500px) {
+	.re-container {
+		text-align: center;
+	}
+
+	.re-container img {
+		margin: auto;
+		float: none;
+		display: block;
+	}
+}
+
+.inside-cont{
+	display:flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	flex-grow:1;
+}
+
+.ii-cont{
+	display: flex;
+	flex-direction:column;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.rating{
+	align-self: center; 
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li{
+	text-align: center !important;
+}
