@@ -80,12 +80,6 @@ DATABASES = {
     'default': {
           'ENGINE': 'django.db.backends.sqlite3',
           'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'ismgroup26',
-    #     'USER': 'ismgroup26',
-    #     'PASSWORD': '97g#fa',
-    #     'HOST': '195.251.249.131',
-    #     'PORT': '3306',
     }
 }
 
@@ -128,5 +122,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# MEDIA_URL =  '/media/' 
+# MEDIA_URL =  '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'ebarber/media')

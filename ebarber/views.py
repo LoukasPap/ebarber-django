@@ -19,7 +19,7 @@ def index(request):
 
 def search(request):
     area = Area.objects.all()
-    aid = request.POST.get('area')
+    aid = request.GET.get('area')
     if aid:
         aname = Area.objects.get(pk=aid)
         availables = Barbershop.um.all().filter(area=aid)
