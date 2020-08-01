@@ -1,17 +1,23 @@
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.template.defaultfilters import slugify
 from django.db import models
 
 # Create your models here.
 class Area(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=40)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
 
     def __str__(self):
         return self.id
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Area, self).save(*args, **kwargs)
 
 class UserManager(models.Manager):
     def validator(self, postData):
@@ -60,9 +66,9 @@ class User(models.Model):
 class Customer(User):
     name = models.CharField(max_length=25)
     surname = models.CharField(max_length=25)
-    # image = models.ImageField(upload_to='customer-image', blank=True)
 
 class Barbershop(User):
     address = models.CharField(max_length=20)
     area = models.ForeignKey(Area, on_delete=models.CASCADE)
-    # image = models.ImageField(upload_to='barber-image', blank=True)
+
+    objects = models.Manager()
