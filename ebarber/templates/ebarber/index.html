@@ -77,8 +77,8 @@
 						</div>
 					</div>
 
-					<form method="post" action="{% url 'ebarber:search' %}">
-						{% csrf_token %}
+					<form method="get" action="{% url 'ebarber:search' %}">
+						<!-- {% csrf_token %} -->
 						<div class="search-box">
 							<div class="input-group">
 								<button class="search-btn" href="">
@@ -88,7 +88,7 @@
 									<optgroup label="Αθήνα">
 										<option value="" disabled selected hidden>Select your area</option>
 											{% for i in obj %}
-												<option value="{{ i.id }}"> {{ i.name }} </option>
+												<option name="option" value="{{ i.id }}"> {{ i.name }} </option>
 											{% endfor %}
 									</optgroup>
 								</select>
