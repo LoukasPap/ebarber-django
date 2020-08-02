@@ -15,15 +15,17 @@ This is my first mini website using Django, for my lab assignment on the course 
  1. Activate your virtual environment, by executing `pipenv shell`.
  2. Run the project on local host, with the command `python manage.py runserver`
  
- ## Things to have in mind
+ ## Things to have in mind :thought_balloon:
  * Some naming conventions are written in Greek. 
  * Login and register functions, are not executed with Django's ready methods.
  * SQLite is the used database.
  
+ ## Contribution
+ Feel free to fork the repository, and improve code. There are more tests to be done yet, and more code to be refactored. Just leave an issue first and wait for my agreement. 
   
 ## Authors
 **Loukas Papadopoulos** - *Initial work* - [LoukasPap](https://github.com/LoukasPap)
 
 ## Acknowledgments
-**General [documentation](https://docs.djangoproject.com/en/3.0/) for Django.** <br>
-**How to [install](https://docs.djangoproject.com/en/3.0/intro/install/) it.**
+General [documentation](https://docs.djangoproject.com/en/3.0/) for Django.<br>
+How to [install](https://docs.djangoproject.com/en/3.0/intro/install/) it.
