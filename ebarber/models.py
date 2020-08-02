@@ -40,15 +40,15 @@ class UserManager(models.Manager):
         if( postData['kind'] == 'customer'):
 
             if( (postData['name'].isalpha()==False) or len(postData['name'])<5 or len(postData['name'])>25 ):
-                errors += "<li>Write your name from 5 to 25 characters and don't put numbers in it</li>"
+                errors += "<li>Write your name from 5 to 25 characters and don't put numbers in it.</li>"
 
             if( (postData['surname'].isalpha()==False) or len(postData['surname'])<5 or len(postData['surname'])>25 ):
-                errors += "<li>Write your surname from 5 to 25 characters, and don't put numbers in it!</li>"
+                errors += "<li>Write your surname from 5 to 25 characters and don't put numbers in it.</li>"
 
         if( postData['kind'] == 'barbershop'):
 
             if( len(postData['address'])>25 ):
-                errors += "<li>Write your address with no more than 25 characters</li>"
+                errors += "<li>Write your address with no more than 25 characters.</li>"
 
         return errors
 
@@ -59,6 +59,7 @@ class User(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=10)
     um = UserManager()
+    objects = models.Manager()
 
     class Meta:
         abstract = True
@@ -70,5 +71,3 @@ class Customer(User):
 class Barbershop(User):
     address = models.CharField(max_length=20)
     area = models.ForeignKey(Area, on_delete=models.CASCADE)
-
-    objects = models.Manager()
