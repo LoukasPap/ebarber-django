@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 from ebarber.models import Area, Customer, Barbershop
 from ebarber.views import *
 
+
+from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+
 # Set up method to facilitate later testing
 class TestViews(TestCase):
 
@@ -13,9 +17,11 @@ class TestViews(TestCase):
             id = 1,
             name = 'Kolonos'
         )
+
         self.index_url = reverse('ebarber:index')
         self.search_url = reverse('ebarber:search')
         self.register_url = reverse('ebarber:register')
+        self.login_url = reverse('ebarber:login')
 
         self.test_area = {
             'id' : '1',
@@ -86,32 +92,46 @@ class TestViews(TestCase):
             'surname' : 'Panagios'
         }
         self.customer_invalidName = {
-        'kind' : 'customer',
-        'username' : 'TestingC1',
-        'password' : '123456',
-        'email' : 'cus1@hotmail.com',
-        'phone' : '6922222222',
-        'name' : 'Adam',
-        'surname' : 'Panagios'
+            'kind' : 'customer',
+            'username' : 'TestingC1',
+            'password' : '123456',
+            'email' : 'cus1@hotmail.com',
+            'phone' : '6922222222',
+            'name' : 'Adam',
+            'surname' : 'Panagios'
         }
         self.customer_invalidSurname = {
-        'kind' : 'customer',
-        'username' : 'TestingC1',
-        'password' : '123456',
-        'email' : 'cus1@hotmail.com',
-        'phone' : '6922222222',
-        'name' : 'Adamantios',
-        'surname' : 'Pan'
+            'kind' : 'customer',
+            'username' : 'TestingC1',
+            'password' : '123456',
+            'email' : 'cus1@hotmail.com',
+            'phone' : '6922222222',
+            'name' : 'Adamantios',
+            'surname' : 'Pan'
         }
         self.barbershop_invalidAddress = {
-        'kind' : 'barbershop',
-        'username' : 'TestingB1',
-        'password' : '123456',
-        'email' : 'bar1@hotmail.com',
-        'phone' : '6911111111',
-        'address' : 'A text to test the address field',
-        'area' : self.test_area['id']
+            'kind' : 'barbershop',
+            'username' : 'TestingB1',
+            'password' : '123456',
+            'email' : 'bar1@hotmail.com',
+            'phone' : '6911111111',
+            'address' : 'A text to test the address field',
+            'area' : self.test_area['id']
         }
+
+        self.customer_login_success = {
+            'username' : 'testcustomer',
+            'password' : '123456',
+        }
+
+        self.barbershop_login_success = {
+            'ifbarber' : 'True',
+            'username' : 'testbarbershop',
+            'password' : '123456',
+        }
+
+        return super().setUp()
+
 
 #Tests for index and search view
 class TestIndexAndSearch(TestViews):
@@ -211,7 +231,7 @@ class TestRegister(TestViews):
             surname = 'Kruss'
         )
         response=self.client.post(self.register_url, self.customer_for_testing_existing_fields, format='text/html')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code,400)
         self.assertEqual(response.context['message'], 'Username and email already exist!')
 
     def test_register_UsernameExists(self):
@@ -225,7 +245,7 @@ class TestRegister(TestViews):
             surname = 'Kruss'
         )
         response=self.client.post(self.register_url, self.customer_for_testing_existing_fields, format='text/html')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(response.context['message'], 'Username already exists! Try another. ')
 
     def test_register_EmailExists(self):
@@ -239,5 +259,52 @@ class TestRegister(TestViews):
             surname = 'Kruss'
         )
         response=self.client.post(self.register_url, self.customer_for_testing_existing_fields, format='text/html')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(response.context['message'], 'Email already exists! Try another. ')
+
+class TestLogin(TestViews):
+
+    def test_login_customer_Success(self):
+        test_login_customer = Customer.objects.create(
+        id = 1,
+        username = 'testcustomer',
+        password = '123456',
+        email = 'loginemail@hotmail.com',
+        phone = '6933333333',
+        name = 'Chris',
+        surname = 'Sauzz'
+        )
+        response = self.client.post(self.login_url, self.customer_login_success, format='text/html')
+        user = Customer.um.filter(username = self.customer_login_success['username']).first()
+        user.is_active = True
+        user.save()
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.context['success'], 'You have logged in successfully!')
+
+    def test_login_barbershop_Success(self):
+        test_login_barbershop = Barbershop.objects.create(
+                    id = 1,
+                    username = 'testbarbershop',
+                    password = '123456',
+                    email = 'loginemail@hotmail.com',
+                    phone = '6922222222',
+                    address = 'Silver 01',
+                    area = Area.objects.get(pk=self.test_area_obj.id)
+                )
+        response = self.client.post(self.login_url, self.barbershop_login_success, format='text/html')
+        user = Barbershop.um.filter(username = self.barbershop_login_success['username']).first()
+        user.is_active = True
+        user.save()
+        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.context['success'], 'You have logged in successfully!')
+
+    def test_login_noUsername(self):
+        response = self.client.post(self.login_url, {'username':'', 'password':'12456'}, format='text/html')
+        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.context['message'], 'Username and password are needed to log in.')
+
+    def test_login_noPassword(self):
+        response = self.client.post(self.login_url, {'username':'username', 'password':''}, format='text/html')
+        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.context['message'], 'Username and password are needed to log in.')

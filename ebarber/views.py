@@ -75,21 +75,21 @@ def register(request):
                     'message': 'Username and email already exist!',
                     'obj': area
                 }
-                return render(request, 'ebarber/index.html', args)
+                return render(request, 'ebarber/index.html', args, status=400)
 
             if( Customer.um.filter(username = us).exists() ):
                 args = {
                     'message': 'Username already exists! Try another. ',
                     'obj': area
                 }
-                return render(request, 'ebarber/index.html', args)
+                return render(request, 'ebarber/index.html', args, status=400)
 
             if( Customer.um.filter(email = em).exists() ):
                 args = {
                     'message': 'Email already exists! Try another. ',
                     'obj': area
                 }
-                return render(request, 'ebarber/index.html', args)
+                return render(request, 'ebarber/index.html', args, status=400)
 
             user = Customer.um.create(username=request.POST['username'], password=request.POST['password'],
                                     email=request.POST['email'], phone=request.POST['phone'],
@@ -101,21 +101,21 @@ def register(request):
                     'message': 'Username and email already exist!',
                     'obj': area
                 }
-                return render(request, 'ebarber/index.html', args)
+                return render(request, 'ebarber/index.html', args, status=400)
 
             if( Barbershop.um.filter(username = us).exists() ):
                 args = {
                     'message': 'Username already exists! Try another. ',
                     'obj': area
                 }
-                return render(request, 'ebarber/index.html', args)
+                return render(request, 'ebarber/index.html', args, status=400)
 
             if( Barbershop.um.filter(email = em).exists() ):
                 args = {
                     'message': 'Email already exists! Try another. ',
                     'obj': area
                 }
-                return render(request, 'ebarber/index.html', args)
+                return render(request, 'ebarber/index.html', args, status=400)
 
             user = Barbershop.um.create(username=request.POST['username'], password=request.POST['password'],
                                         email=request.POST['email'], phone=request.POST['phone'],
@@ -130,6 +130,12 @@ def register(request):
 def login(request):
     area = Area.objects.all()
     if not request.POST.get('username'):
+        context = {
+            'message': 'Username and password are needed to log in.',
+            'obj':area
+        }
+        return render(request, 'ebarber/index.html', context)
+    if not request.POST.get('password'):
         context = {
             'message': 'Username and password are needed to log in.',
             'obj':area
